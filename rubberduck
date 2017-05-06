@@ -1,0 +1,12 @@
+#!/bin/bash
+
+DATE=`date +"%Y%m%d"`
+TIME=`date +"%T"`
+
+if [ ! -d ~/Documents/log ]; then
+  mkdir -p ~/Documents/log;
+fi
+
+printf "\n\n## $TIME\n\n" >> ~/Documents/log/$DATE.md
+
+vi ~/Documents/log/$DATE.md

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ ! -d ~/Development/boilerplate ]; then
+  echo "No ~/Development/boilerplate directory found"
+  echo "Making ~/Development/boilerplate..."
+  mkdir -p ~/Development/boilerplate
+fi
+
+if [ ! -f ~/Development/boilerplate/index.html ]; then
+  echo "No index.html boilerplate found"
+  echo "Making index.html boilerplate..."
+  printf "<!DOCTYPE html>\n<html lang=\"en\">\n\t<head>\n\t\t<meta charset=\"utf-8\">\n\n\t\t<title>ApplicationTitle</title>\n\t\t<meta name=\"description\" content=\"descriptionheregetitwhileitshot\">\n\t\t<meta name=\"author\" content=\"phaedrus\">\n\n\t\t<link rel=\"stylesheet\" href=\"styles.css\">\n\t</head>\n\n\t<body>\n\t\t<div class=\"container\">\n\t\t\t<h1>SoFresh</h1>\n\t\t\t<p>SoClean</p>\n\t\t</div>\n\n\t\t<script type=\"text/javascript\" src=\"scripts.js\"></script>\n\t</body>\n</html>" >> ~/Development/boilerplate/index.html
+fi
+
+echo "Copying boilerplate into your current directory..."
+cp ~/Development/boilerplate/index.html index.html
+
+echo "Fresh static, ready!"
