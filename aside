@@ -2,9 +2,14 @@
 
 DATE=`date +"%Y%m%d"`
 TIME=`date +"%T"`
+HEAD=`date +"%Y %b %d"`
 
 if [ ! -d ~/Documents/log ]; then
-  mkdir -p ~/Documents/log;
+  mkdir -p ~/Documents/log
+fi
+
+if [ ! -f ~/Documents/log/$DATE.md ]; then
+  printf "# $HEAD" >> ~/Documents/log/$DATE.md
 fi
 
 printf "\n\n## $TIME\n\n" >> ~/Documents/log/$DATE.md
