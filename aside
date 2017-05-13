@@ -1,17 +1,50 @@
 #!/bin/bash
 
+BR="\n"
+BREAK="\n\n"
+TAB="\t"
+BUL="\t\t*"
+
 DATE=`date +"%Y%m%d"`
 TIME=`date +"%T"`
 HEAD=`date +"%Y %b %d"`
 
-if [ ! -d ~/Documents/log ]; then
-  mkdir -p ~/Documents/log
+DIR=~/Documents/log
+FILE=$DIR/$DATE.md
+
+if [ ! -d $DIR ]; then
+  mkdir -p $DIR
 fi
 
-if [ ! -f ~/Documents/log/$DATE.md ]; then
-  printf "# $HEAD" >> ~/Documents/log/$DATE.md
+if [ ! -f $FILE ]; then
+  printf "# $HEAD" >> $FILE
+  # add habits
+  printf "$BREAK$BUL Exercise: --$BR" >> $FILE
+  printf "$BUL Meditate: --$BR" >> $FILE
+  printf "$BUL Read: --$BR" >> $FILE
 fi
 
-printf "\n\n## $TIME\n\n" >> ~/Documents/log/$DATE.md
+# set time header
+printf "\n\n## $TIME\n\n" >> $FILE
 
-vi ~/Documents/log/$DATE.md
+# update habits
+# TODO: add replace/append distinction when updating
+while read line; do
+  if [[ $line =~ ";; Exercise:" ]]; then
+    # grab text after identifier (;;)
+    LOG=${line:3}
+    # replace header with it
+    sed -i -e "3s/.*/$(printf '\t\t')* $LOG/g" $FILE
+  fi
+  if [[ $line =~ ";; Meditate:" ]]; then
+    LOG=${line:3}
+    sed -i -e "4s/.*/$(printf '\t\t')* $LOG/g" $FILE
+  fi
+  if [[ $line =~ ";; Read:" ]]; then
+    LOG=${line:3}
+    sed -i -e "5s/.*/$(printf '\t\t')* $LOG/g" $FILE
+  fi
+done <$FILE
+
+# open logfile for writing
+vi $FILE
