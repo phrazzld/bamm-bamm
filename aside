@@ -18,33 +18,10 @@ fi
 
 if [ ! -f $FILE ]; then
   printf "# $HEAD" >> $FILE
-  # add habits
-  printf "$BREAK$BUL Exercise: --$BR" >> $FILE
-  printf "$BUL Meditate: --$BR" >> $FILE
-  printf "$BUL Read: --$BR" >> $FILE
 fi
 
 # set time header
 printf "\n\n## $TIME\n\n" >> $FILE
-
-# update habits
-# TODO: add replace/append distinction when updating
-while read line; do
-  if [[ $line =~ ";; Exercise:" ]]; then
-    # grab text after identifier (;;)
-    LOG=${line:3}
-    # replace header with it
-    sed -i -e "3s/.*/$(printf '\t\t')* $LOG/g" $FILE
-  fi
-  if [[ $line =~ ";; Meditate:" ]]; then
-    LOG=${line:3}
-    sed -i -e "4s/.*/$(printf '\t\t')* $LOG/g" $FILE
-  fi
-  if [[ $line =~ ";; Read:" ]]; then
-    LOG=${line:3}
-    sed -i -e "5s/.*/$(printf '\t\t')* $LOG/g" $FILE
-  fi
-done <$FILE
 
 # open logfile for writing
 vi $FILE
