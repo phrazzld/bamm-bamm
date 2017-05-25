@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# aside - create timestamped log entries on the fly
+
 BR="\n"
 BREAK="\n\n"
 TAB="\t"

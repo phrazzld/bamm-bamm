@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# freshstatic - create boilerplate html
+
 if [ ! -d ~/Development/boilerplate ]; then
   echo "No ~/Development/boilerplate directory found"
   echo "Making ~/Development/boilerplate..."

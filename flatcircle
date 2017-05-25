@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# flatcircle - fetch and view past log entries
+# depends on node package ttab
+
+DIR=~/Documents/log
+if [ ! -d $DIR ]; then
+  mkdir -p $DIR
+fi
+
+YESTERDAY=`date -v -1d +"%Y%m%d"`
+FILE=$DIR/$YESTERDAY.md
+if [ -f $FILE ]; then
+  `ttab -w less $FILE`
+fi
+
+LASTWEEK=`date -v -1w +"%Y%m%d"`
+FILE=$DIR/$LASTWEEK.md
+if [ -f $FILE ]; then
+  `ttab -w less $FILE`
+fi
+
+LASTMONTH=`date -v -1m +"%Y%m%d"`
+FILE=$DIR/$LASTMONTH.md
+if [ -f $FILE ]; then
+  `ttab -w less $FILE`
+fi
+
+LASTYEAR=`date -v -1y +"%Y%m%d"`
+FILE=$DIR/$LASTYEAR.md
+if [ -f $FILE ]; then
+  `ttab -w less $FILE`
+fi
