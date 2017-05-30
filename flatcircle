@@ -26,6 +26,12 @@ if [ -f $FILE ]; then
   `ttab -w less $FILE`
 fi
 
+THREEMONTHSAGO=`date -v -3m +"%Y%m%d"`
+FILE=$DIR/$THREEMONTHSAGO.md
+if [ -f $FILE ]; then
+  `ttab -w less $FILE`
+fi
+
 LASTYEAR=`date -v -1y +"%Y%m%d"`
 FILE=$DIR/$LASTYEAR.md
 if [ -f $FILE ]; then

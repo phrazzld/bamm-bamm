@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# tfour - make / open Markdown file in vim for given document title
+
+DOC=$1
+
+vi ~/Documents/tfour/$DOC.md
