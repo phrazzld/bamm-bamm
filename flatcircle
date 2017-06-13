@@ -3,7 +3,9 @@
 # flatcircle - fetch and view past log entries
 # depends on node package ttab
 
-DIR=~/Documents/log
+SUBJ=${1:-general}
+
+DIR=~/Documents/logs/$SUBJ
 if [ ! -d $DIR ]; then
   mkdir -p $DIR
 fi

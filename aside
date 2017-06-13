@@ -2,6 +2,8 @@
 
 # aside - create timestamped log entries on the fly
 
+SUBJ=${1:-general}
+
 BR="\n"
 BREAK="\n\n"
 TAB="\t"
@@ -11,7 +13,7 @@ DATE=`date +"%Y%m%d"`
 TIME=`date +"%T"`
 HEAD=`date +"%Y %b %d"`
 
-DIR=~/Documents/log
+DIR=~/Documents/logs/$SUBJ
 FILE=$DIR/$DATE.md
 
 if [ ! -d $DIR ]; then
@@ -19,6 +21,9 @@ if [ ! -d $DIR ]; then
 fi
 
 if [ ! -f $FILE ]; then
+  if [ $SUBJ != "general" ]; then
+    printf "### ${SUBJ}\n" >> $FILE
+  fi
   printf "# $HEAD" >> $FILE
 fi
 
