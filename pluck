@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# pluck - print a random line from a given file
+
+FILE=$1
+
+if [ ! -f $FILE ]; then
+  printf "Invalid filename"
+  return
+fi
+
+# get number of lines in the file
+NUMLINES_STR=`wc -l < ${FILE}`
+# funny whitespace, extract just the number
+NUMLINES="${NUMLINES_STR//[!0-9]/}"
+
+# pick a random number between 1 and NUMLINES
+LINENUM=$(( ( RANDOM % ${NUMLINES} ) + 1 ))
+
+LINE=`sed "${LINENUM}q;d" ${FILE}`
+
+printf "${LINE}\n\n"
