@@ -19,4 +19,4 @@ LINENUM=$(( ( RANDOM % ${NUMLINES} ) + 1 ))
 
 LINE=`sed "${LINENUM}q;d" ${FILE}`
 
-printf "${LINE}\n\n"
+printf "\n${LINE}\n\n"
