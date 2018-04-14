@@ -1,0 +1,78 @@
+#!/bin/bash
+# Mirror repositories listed in a text file from one Bitbucket server to another
+# Author: Phaedrus Raznikov
+# Date: April 10, 2018
+
+# mirror_file format:
+# *PROJECT_01
+# repo_to_be_mirrored_01
+# repo_to_be_mirrored_02
+# 
+# *PROJECT_02
+# ...
+
+skipped_file="$HOME/Development/skipped_migrations.txt"
+mirror_file=""
+source_bucket=""
+target_bucket=""
+port=""
+project=""
+repo=""
+
+# Get configuration from user input
+read -p "Mirror file: " mirror_file
+read -p "Source server (sub.domain.top): " source_bucket
+read -p "Target server (sub.domain.top): " target_bucket
+read -p "Port (7999 for most Bitbucket servers): " port
+
+echo "Migrating repos listed in $mirror_file from ssh://git@$source_bucket:$port to ssh://git@$target_bucket:$port"
+
+# Read lines from the mirror file
+while read line; do
+    echo "line: $line"
+    # Don't do anything with newlines
+    if [ -z "$line" ] ;then
+        echo "On to the next one..."
+        cd "$HOME/Development"
+    # Lines starting with asterisks are projects, create a directory and move into it
+    elif [ "${line:0:1}" == "*" ] ;then
+        project=${line:1}
+        echo "Project: $project"
+        mkdir -p "$HOME/Development/$project"
+        cd "$HOME/Development/$project"
+    # Treat all other lines as repository names for the most recently defined project
+    else
+        repo=$line
+        # Handle repositories with spaces
+        repo=${repo// /-}
+        cd "$HOME/Development/$project"
+        echo "Migrating $project : $repo repository..."
+        source_url="ssh://git@$source_bucket:$port/$project/$repo.git"
+        target_url="ssh://git@$target_bucket:$port/$project/$repo.git"
+        # Only clone and push mirrors if local versions don't exist
+        if [ ! -d "$HOME/Development/$project/$repo.git" ] ;then
+            git clone --mirror "$source_url"
+            cd "$HOME/Development/$project/$repo.git"
+            # If `git fsck` finds a fatal or an error or an unborn pointer, log it
+            if git fsck --progress >fsckoutput.txt 2>&1 && cat fsckoutput.txt | grep -Eq "(fatal|error|unborn)" ;then
+                echo "Integrity of $project:$repo is questionable, skipping migration..."
+                echo "$project:$repo skipped (git fsck issues)" >> "$skipped_file"
+            # If the repository doesn't exist, log it
+            elif [ ! -d "$HOME/Development/$project/$repo.git" ] ;then
+                echo "Repository doesn't exist. Maybe you misspelled it?"
+                echo "$project:$repo (repo doesn't exist)" >> "$skipped_file"
+            # If there's a pull request ref in packed-refs, log it
+            elif [ -f packed-refs ] && cat packed-refs | grep -q "pull-requests" ;then
+                echo "Pull request refs found, resolve those and try again."
+                echo "$project:$repo (pull request ref found)" >> "$skipped_file"
+            # If none of the above things go wrong, push the mirror
+            else
+                git push --mirror "$target_url"
+            fi
+        else
+            echo "$repo already exists locally. Gonna assume it's been pushed."
+            echo "$project:$repo (repo already exists locally)" >> "$skipped_file"
+        fi
+    fi
+    printf "\n"
+done < "$mirror_file"

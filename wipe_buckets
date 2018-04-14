@@ -1,0 +1,19 @@
+#!/bin/bash
+
+printf "\nChecking AWS credentials...\n";
+
+# TODO: actually verify AWS credentials
+
+printf "All buckets that will be destroyed:\n";
+
+printf "$(aws s3 ls)\n";
+
+# Confirm user wants to actually destroy all S3 buckets
+printf "\nAre you sure you want to destroy all your buckets (y/n)? \n";
+read answer
+if echo "$answer" | grep -iq "^y" ;then
+    printf "\nConfirmed, destroying all buckets...\n";
+    # Destroy all buckets
+else
+    printf "\nCanceling...\n";
+fi

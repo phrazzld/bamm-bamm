@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# self-authoring-review: review selfauthoring documents in /Documents/jots
+# Author: Phaedrus Raznikov
+# Date: 2018 Apr 2
+
+# Open Present:Virtues
+gnome-terminal -x vim ~/Documents/jots/selfauthoring_virtues.md +Goyo
+
+# Open Present:Faults
+gnome-terminal -x vim ~/Documents/jots/selfauthoring_faults.md +Goyo
