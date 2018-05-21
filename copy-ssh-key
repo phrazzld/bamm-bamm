@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Set default keyfile to copy
+keyfile=~/.ssh/id_rsa.pub
+
+# Override default if user passed a command line argument
+if [ -z "$1" ]; then
+    echo -e "No key file specified, using id_rsa.pub as default..."
+else
+    echo -e "Using $1 as key file..."
+    keyfile=$1
+fi
+
+# Copy the keyfile contents to the clipboard
+xclip -sel clip < $keyfile
+
+# Alert the user of the operation's success
+echo -e "\nCopied $keyfile to clipboard"
+
+# Exit program with a success code
+exit 0
